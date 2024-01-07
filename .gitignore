@@ -1,0 +1,44 @@
+# Node.js
+node_modules/
+
+# TypeScript
+*.js
+*.js.map
+*.tsbuildinfo
+
+# Express
+build/
+dist/
+
+# Prisma
+prisma/migrations
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+
+# Visual Studio Code settings
+.vscode/
+
+# Dependency directories
+.pnpm/
+.yarn/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db/
+
+# Compiled binary addons (Node-gyp)
+/build/
+
+# Yarn Integrity file
+.yarn-integrity
+
+# npm debugging logs
+npm-debug.log
