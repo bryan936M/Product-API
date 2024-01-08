@@ -9,7 +9,7 @@ export const errorHandler = (
 ) => {
   console.log(err.message);
 
-  if (err.name === "ValidationError") {
+  if (err.name == "ValidationError") {
     return res.status(400).send({
       "type": "ValidationError",
       "details": err.details,
@@ -17,7 +17,9 @@ export const errorHandler = (
   }
 
   if (err instanceof AppError.customError) {
-    return res.status(err.statusCode).send({ error: err.description });
+    const { statusCode, description, name } = err;
+    
+    return res.status(statusCode).send({ [name]: description });
   }
 
   return res.status(500).send({ error: err.message });
