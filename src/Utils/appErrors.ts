@@ -1,19 +1,19 @@
-export const STATUS_CODES = {
-    OK: 200,
-    BAD_REQUEST: 400,
-    UN_AUTHORISED: 403,
-    NOT_FOUND: 404,
-    CONFLICT: 409,
-    INTERNAL_ERROR: 500,
+export enum STATUS_CODES  {
+    OK= 200,
+    BAD_REQUEST = 400,
+    UN_AUTHORISED = 403,
+    NOT_FOUND = 404,
+    CONFLICT = 409,
+    INTERNAL_ERROR = 500,
 };
 
 export class customError extends Error {
-    protected errorName: string;
-    protected statusCode: number;
+    // protected errorName: string;
+    // protected statusCode: number;
 
-    constructor(name: string, description: string, statusCode: number) {
+    constructor(name: string, public description: string, public statusCode: number) {
         super(description);
-        this.errorName = name;
+        this.name = name;
         this.statusCode = statusCode;
     }
 }

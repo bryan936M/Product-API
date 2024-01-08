@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { NextFunction, Request, Response } from "express";
-import tryAndCatch from "../Utils";
+import { Request, Response } from "express";
+import { tryCatcher as tryAndCatch, AppError } from "../Utils";
 import Joi from "joi";
 
 interface IProduct {
@@ -29,7 +29,7 @@ export default (prisma: PrismaClient) => {
     const product = await prisma.product.findUnique({
       where: { id },
     });
-    
+
     if (!product) {
       throw new Error("Product not found");
     }
@@ -48,10 +48,6 @@ export default (prisma: PrismaClient) => {
 
     const { error, value } = productSchema.validate(req.body);
 
-    if (error) {
-      throw new Error(error.message);
-    }
-
     const product = await prisma.product.create({
       data: { ...value },
     });
@@ -64,10 +60,6 @@ export default (prisma: PrismaClient) => {
     const { error, value } = idSchema.validate(req.params, {
       abortEarly: false,
     });
-    
-    if (error) {
-      throw new Error(error.message);
-    }
 
     const product = await findProductById(value?.id);
 
@@ -76,48 +68,38 @@ export default (prisma: PrismaClient) => {
 
   const updateProduct = tryAndCatch(async (req: Request, res: Response) => {
     if (!req?.body || Object.keys(req.body).length === 0) {
-      throw new Error('Empty body.');
+      throw new Error("Empty body.");
     }
-    
 
-    const { error: idError, value: idValue } = idSchema.validate(req.query);
-    const { error: infoError, value: infoValue } = updateInfoSchema.validate(req.body);
-    
-    if (idError) throw new Error(idError.message);
-    if (infoError) throw new Error(infoError.message);
-  
-    const { name, description, price }: IProduct = req.body;
-    
+    const { value: idValue } = idSchema.validate(req.query);
+    const { value: infoValue } = updateInfoSchema.validate(req.body);
+
     const product = await findProductById(idValue.id);
-  
+
     const updatedProduct = await prisma.product.update({
       where: { id: idValue.id },
-      data: { 
+      data: {
         name: infoValue.name || product.name,
         description: infoValue.description || product.description,
         price: infoValue.price || product.price,
       },
     });
-  
+
     res.send({ "Updated product": updatedProduct });
   });
-  
 
   const deleteProductById = tryAndCatch(async (req: Request, res: Response) => {
     // TODO: Implement logic to delete a product by ID from the database
     const { error, value } = idSchema.validate(req.params, {
       abortEarly: false,
     });
-    
-    if (error) {
-      throw new Error(error.message);
-    }
 
     await findProductById(value?.id);
-    const deletedProduct = await prisma.product.delete({where: {id: value?.id}});
+    const deletedProduct = await prisma.product.delete({
+      where: { id: value?.id },
+    });
 
     res.send({ "Deleted product: ": deletedProduct });
-    
   });
 
   const deleteAllProducts = tryAndCatch(async (req: Request, res: Response) => {
