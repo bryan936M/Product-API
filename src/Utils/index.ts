@@ -1,9 +1,3 @@
-import exp from "constants";
-import { Request, Response, NextFunction } from "express";
+export * as AppError from "./appErrors";
+export { default as tryCatcher } from './tryCatch';
 
-const tryCatcher =
-  (fn: any) => async (req: Request, res: Response, next: NextFunction) => {
-    return fn(req, res).catch(next);
-  };
-
-export default tryCatcher;
