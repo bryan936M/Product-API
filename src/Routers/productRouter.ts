@@ -1,5 +1,5 @@
 import express from "express";
-import productController from "../Controllers/productController";
+import {productController} from "../Controllers";
 import { PrismaClient } from "@prisma/client";
 
 export default (prisma: PrismaClient) => {

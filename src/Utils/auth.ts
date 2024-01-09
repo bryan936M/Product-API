@@ -1,10 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import {SALT_ROUNDS} from '../Config'
 
 dotenv.config();
 
-const saltRounds = parseInt(process.env.SALT_ROUNDS as string);
+const saltRounds = parseInt(SALT_ROUNDS as string);
+// const saltRounds = parseInt(process.env.SALT_ROUNDS as string);
 
 export const encryptPW = async (
   myPlaintextPassword: string

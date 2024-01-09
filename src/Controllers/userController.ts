@@ -1,10 +1,16 @@
 import Joi from "joi";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import {
+  ACCESS_TOKEN_SECRET as ATC,
+  REFRESH_TOKEN_SECRET as RTC,
+} from "../Config";
 import { tryCatcher as tryAndCatch, authUtils, AppError } from "../Utils";
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
+const ACCESS_TOKEN_SECRET = ATC as string;
+const REFRESH_TOKEN_SECRET = RTC as string;
+// const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
+// const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
 const registrationSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -16,8 +22,8 @@ const registrationSchema = Joi.object({
 
 const loginSchema = Joi.object({
   email: Joi.string()
-  .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-  .required(),
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
   password: Joi.string().pattern(new RegExp("^[ -~]{3,30}$")).required(),
 });
 
@@ -94,7 +100,7 @@ export default (prisma: PrismaClient) => {
       ACCESS_TOKEN_SECRET,
       "15m"
     );
-    
+
     const refreshToken = await authUtils.generateToken(
       user.email,
       REFRESH_TOKEN_SECRET,

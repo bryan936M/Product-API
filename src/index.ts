@@ -2,10 +2,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { PrismaClient } from "@prisma/client";
-import { errorHandler } from "./Middlewares/errorHandler";
-import verifyJWT from "./Middlewares/verifyJWT";
-import productRouter from "./Routers/productRouter";
-import userRouter from "./Routers/userRouter";
+import { verifyJWT, errorHandler } from "./Middlewares";
+import { productRouter, userRouter} from "./Routers";
+
 
 const app = express();
 const prisma = new PrismaClient();
