@@ -9,8 +9,6 @@ import { tryCatcher as tryAndCatch, authUtils, AppError } from "../Utils";
 
 const ACCESS_TOKEN_SECRET = ATC as string;
 const REFRESH_TOKEN_SECRET = RTC as string;
-// const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
-// const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
 const registrationSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),

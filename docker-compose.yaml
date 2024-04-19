@@ -1,15 +1,33 @@
 version: '3'
 
 services:
-  app:
-    container_name: prisma-auth-app
-    build: 
-      dockerfile: dockerfile
-      context: .
+  prisma-auth:
+    container_name: prisma-auth
+    image: prisma-auth:latest
+    build: .
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - .env
+    depends_on:
+      - postgres
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=ProductDB
+    ports:
+      - '5432:5432'
+    volumes:
+      - progresDB:/var/lib/postgresql/data
+
+volumes:
+  progresDB:
     

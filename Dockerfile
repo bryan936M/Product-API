@@ -1,13 +1,22 @@
-FROM node:14.15.4-alpine3.12
+FROM node:18-alpine
 
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
+# copy both to the container
 COPY package*.json ./
 
+# install packages to the container
 RUN npm install
 
+# copy everything
 COPY . .
 
+# # generate the prisma database client
+# RUN npx prisma generate
+
+# expose the api port
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# run the dev app - prod is not currently Dockerised
+CMD [ "npm", "run", "start" ]
